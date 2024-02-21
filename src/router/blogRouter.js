@@ -1,35 +1,48 @@
-const {getList, getDetail} = require('../controller/blogController')
-const {SuccessModel, ErrorModel} = require('../model/resModel')
+const { getList, getDetail, newBlog, updateBlog, deleteBlog } = require('../controller/blogController')
+const { SuccessModel, ErrorModel } = require('../model/resModel')
 const handleBlogRouter = (req, res) => {
+    const id = req.query.id || ''
+
     //命中list路由
-    if(req.method == 'GET' && req.path == '/api/blog/list') {
+    if (req.method == 'GET' && req.path == '/api/blog/list') {
         const author = req.query.author || ''
         const keyword = req.query.keyword || ''
         const listData = getList(author, keyword)
         return new SuccessModel(listData)
     }
     //命中detail路由
-    if(req.method == 'GET' && req.path == '/api/blog/detail') {
-        const id = req.query.id || ''
+    if (req.method == 'GET' && req.path == '/api/blog/detail') {
         const detailData = getDetail(id)
         return new SuccessModel(detailData)
     }
     //命中新增路由
-    if(req.method == 'POST' && req.path == '/api/blog/new') {
-        return {
-            msg: '新增博客'
-        }
+    if (req.method == 'POST' && req.path == '/api/blog/new') {
+        const data = newBlog(req.body)
+        return new SuccessModel(data)
     }
     //命中修改路由
-    if(req.method == 'POST' && req.path == '/api/blog/modify') {
-        return {
-            msg: '修改博客'
+    if (req.method == 'POST' && req.path == '/api/blog/update') {
+        const result = updateBlog(id, req.body)
+        //这里的id 是通过query传递的，但我觉得应该放在body 随着 blog内容一起传递
+        // {
+        //     id: xxx,
+        //     title: xxx,
+        //     content: xxx
+        //     ....
+        // }
+        if (result) {
+            return new SuccessModel()
+        } else {
+            return new ErrorModel('更新失败')
         }
     }
     //命中删除路由
-    if(req.method == 'POST' && req.path == '/api/blog/delete') {
-        return {
-            msg: '删除博客'
+    if (req.method == 'POST' && req.path == '/api/blog/delete') {
+        const result = deleteBlog(id)
+        if (result) {
+            return new SuccessModel()
+        } else {
+            return new ErrorModel('删除失败')
         }
     }
 }

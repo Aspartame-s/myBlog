@@ -1,3 +1,4 @@
+//获取博客列表
 const getList = (author, keyword) => {
     return [
         {
@@ -16,7 +17,7 @@ const getList = (author, keyword) => {
         },
     ]
 }
-
+//获取博客详情
 const getDetail = (id) => {
     return {
         id: 1,
@@ -26,8 +27,26 @@ const getDetail = (id) => {
         author: 'zhangsan'
     }
 }
+//新建博客
+const newBlog = (blogData = {}) => {
+    //blogData 是post接口的 body参数
+    return {
+        id: 3
+    }
+}
+//更新博客
+const updateBlog = (id, blogData = {}) => {
+    return true
+}
+//删除博客
+const deleteBlog = (id) => {
+    return true
+}
 
 module.exports = {
     getList,
-    getDetail
+    getDetail,
+    newBlog,
+    updateBlog,
+    deleteBlog
 }

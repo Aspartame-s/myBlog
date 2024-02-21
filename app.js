@@ -1,8 +1,9 @@
 const { resolve } = require('path')
 const querystring = require('querystring')
 const handleBlogRouter = require('./src/router/blogRouter')
-const handleserRouter = require('./src/router/userRouter')
+const handleUserRouter = require('./src/router/userRouter')
 
+//处理post data
 const getPostData = (req) => {
     const promise = new Promise((resolve, reject) => {
         if (req.method !== 'POST') {
@@ -38,6 +39,8 @@ const serverHandle = (req, res) => {
     req.path = url.split('?')[0]
     //处理query
     req.query = querystring.parse(url.split('?')[1])
+
+    //处理 post data
     getPostData(req).then(postData => {
         req.body = postData
         //处理blog路由
@@ -47,7 +50,7 @@ const serverHandle = (req, res) => {
             return
         }
         //处理user路由
-        const userData = handleserRouter(req, res)
+        const userData = handleUserRouter(req, res)
         if (userData) {
             res.end(JSON.stringify(userData))
             return
