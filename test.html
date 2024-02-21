@@ -28,10 +28,23 @@
   }
 
   let b = new B();
+
+  class Point {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+    }
+
+    toString() {
+      return '(' + this.x + ', ' + this.y + ')';
+    }
+  }
+  let p = new Point(1, 2)
+  console.log(p.constructor == Point.prototype.constructor)
 </script>
 
 <style>
- 
+
 </style>
 
 </html>
