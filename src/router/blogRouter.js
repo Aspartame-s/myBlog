@@ -16,13 +16,22 @@ const handleBlogRouter = (req, res) => {
     }
     //命中detail路由
     if (req.method == 'GET' && req.path == '/api/blog/detail') {
-        const detailData = getDetail(id)
-        return new SuccessModel(detailData)
+        // const detailData = getDetail(id)
+        // return new SuccessModel(detailData)
+        const result = getDetail(id)
+        return result.then(detailData => {
+            return new SuccessModel(detailData)
+        })
     }
     //命中新增路由
     if (req.method == 'POST' && req.path == '/api/blog/new') {
-        const data = newBlog(req.body)
-        return new SuccessModel(data)
+        // const data = newBlog(req.body)
+        // return new SuccessModel(data)
+        req.body.author = '张三'
+        const result = newBlog(req.body)
+        return result.then(data => {
+            return new SuccessModel(data)
+        })
     }
     //命中修改路由
     if (req.method == 'POST' && req.path == '/api/blog/update') {

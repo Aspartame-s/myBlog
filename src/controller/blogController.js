@@ -14,20 +14,22 @@ const getList = (author, keyword) => {
 }
 //获取博客详情
 const getDetail = (id) => {
-    return {
-        id: 1,
-        title: '标题A',
-        content: '内容A',
-        createTime: '1705648303567',
-        author: 'zhangsan'
-    }
+    let sql = `select * from blogs where id='${id}'`
+    return exec(sql).then(row => {
+        return row[0]
+    })
 }
 //新建博客
 const newBlog = (blogData = {}) => {
     //blogData 是post接口的 body参数
-    return {
-        id: 3
-    }
+    const {title, content, author} = blogData
+    const createTime = Date.now()
+    let sql = `insert into blogs (title, content, createtime, author) values ('${title}', '${content}', ${createTime}, '${author}')`
+    return exec(sql).then(insertData => {
+        return {
+            id: insertData.insertId
+        }
+    })
 }
 //更新博客
 const updateBlog = (id, blogData = {}) => {
