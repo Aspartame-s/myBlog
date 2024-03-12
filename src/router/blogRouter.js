@@ -27,7 +27,7 @@ const handleBlogRouter = (req, res) => {
     if (req.method == 'POST' && req.path == '/api/blog/new') {
         // const data = newBlog(req.body)
         // return new SuccessModel(data)
-        req.body.author = '张三'
+        req.body.author = '张三' //假数据，待开发登陆时替换为真数据
         const result = newBlog(req.body)
         return result.then(data => {
             return new SuccessModel(data)
@@ -43,20 +43,26 @@ const handleBlogRouter = (req, res) => {
         //     content: xxx
         //     ....
         // }
-        if (result) {
-            return new SuccessModel()
-        } else {
-            return new ErrorModel('更新失败')
-        }
+        return result.then(data => {
+            if (data) {
+                return new SuccessModel()
+            } else {
+                return new ErrorModel('更新失败')
+            }
+        })
     }
     //命中删除路由
     if (req.method == 'POST' && req.path == '/api/blog/delete') {
-        const result = deleteBlog(id)
-        if (result) {
-            return new SuccessModel()
-        } else {
-            return new ErrorModel('删除失败')
-        }
+        const author = '张三'
+        const result = deleteBlog(id,author)
+        return result.then(data => {
+            if (data) {
+                return new SuccessModel()
+            } else {
+                return new ErrorModel('删除失败')
+            }
+        })
+        
     }
 }
 
