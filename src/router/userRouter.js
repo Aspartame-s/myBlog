@@ -8,7 +8,7 @@ const handleUserRouter = (req, res) => {
         const result = login(username, password)
         return result.then(data => {
             if (data.username) {
-                res.setHeader('Set-Cookie', `username=${username}; path=/`)
+                res.setHeader('Set-Cookie', `username=${username}; path=/; httpOnly`)
                 return new SuccessModel()
             }
             return new ErrorModel('登录失败，请检查用户名和密码')
