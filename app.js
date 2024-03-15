@@ -12,7 +12,6 @@ const getCookieExpires = () => {
     return d.toGMTString()
 }
 
-
 //处理post data
 const getPostData = (req) => {
     const promise = new Promise((resolve, reject) => {
