@@ -4,6 +4,8 @@ const handleBlogRouter = require('./src/router/blogRouter')
 const handleUserRouter = require('./src/router/userRouter')
 
 const SESSION_DATA = {}
+
+//设置cookie到期时间
 const getCookieExpires = () => {
     const d = new Date()
     d.setTime(d.getTime() + (24 * 60 * 60 * 1000))
@@ -44,14 +46,14 @@ const serverHandle = (req, res) => {
     const url = req.url
     //处理path
     req.path = url.split('?')[0]
-    //处理query
+    //解析query
     req.query = querystring.parse(url.split('?')[1])
 
     //解析cookie
     req.cookie = {}
     const cookieStr = req.headers.cookie || ''
     cookieStr.split(';').forEach(item => {
-        if(!item) {
+        if (!item) {
             return
         }
         const arr = item.split('=')
@@ -63,11 +65,11 @@ const serverHandle = (req, res) => {
     //解析session
     let userId = req.cookie.userid
     let needSetCookie = false
-    if(userId) {
-        if(!SESSION_DATA[userId]) {
+    if (userId) {
+        if (!SESSION_DATA[userId]) {
             SESSION_DATA[userId] = {}
         }
-    }else {
+    } else {
         needSetCookie = true
         userId = `${Date.now()}_${Math.random()}`
         SESSION_DATA[userId] = {}
@@ -87,7 +89,7 @@ const serverHandle = (req, res) => {
         const blogResult = handleBlogRouter(req, res)
         if (blogResult) {
             blogResult.then(blogData => {
-                if(needSetCookie) {
+                if (needSetCookie) {
                     res.setHeader('Set-Cookie', `userid=${userId}; path=/; httpOnly; expires=${getCookieExpires()}`)
                 }
                 res.end(JSON.stringify(blogData))
@@ -98,7 +100,7 @@ const serverHandle = (req, res) => {
         const userResult = handleUserRouter(req, res)
         if (userResult) {
             userResult.then(userData => {
-                if(needSetCookie) {
+                if (needSetCookie) {
                     res.setHeader('Set-Cookie', `userid=${userId}; path=/; httpOnly; expires=${getCookieExpires()}`)
                 }
                 res.end(JSON.stringify(userData))
