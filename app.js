@@ -76,6 +76,7 @@ const serverHandle = (req, res) => {
 
     //处理 post data
     getPostData(req).then(postData => {
+        console.log(req.session)
         req.body = postData
         //处理blog路由
         // const blogData = handleBlogRouter(req, res)
