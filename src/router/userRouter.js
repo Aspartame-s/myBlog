@@ -1,5 +1,6 @@
 const { login } = require('../controller/userController')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
+const { set,get } = require('../db/redis')
 
 const handleUserRouter = (req, res) => {
     if (req.method == 'GET' && req.path == '/api/user/login') {
@@ -10,14 +11,15 @@ const handleUserRouter = (req, res) => {
             if (data.username) {
                 req.session.username = data.username
                 req.session.realname = data.realname
+                set(req.sessionId, req.session)
                 return new SuccessModel()
             }
             return new ErrorModel('登录失败，请检查用户名和密码')
         })
     }
 
-    if(req.method == 'GET' && req.path == '/api/user/login-test') {
-        if(req.session.username) {
+    if (req.method == 'GET' && req.path == '/api/user/login-test') {
+        if (req.session.username) {
             return Promise.resolve(new SuccessModel({
                 session: req.session
             }))
