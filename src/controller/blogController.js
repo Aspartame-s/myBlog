@@ -1,15 +1,15 @@
 const {exec} = require('../db/mysql')
 //获取博客列表
 const getList = (author, keyword) => {
+    console.log(author)
     let sql = `select * from blogs where 1=1 `
     if(author) {
-        sql += `and author='%${author}%' `
+        sql += `and author='${author}' `
     }
     if(keyword) {
         sql += `and title like '%${keyword}%' `
     }
     sql += `order by createtime desc`
-
     return exec(sql)
 }
 //获取博客详情
