@@ -3,9 +3,9 @@ const { SuccessModel, ErrorModel } = require('../model/resModel')
 const {set} = require('../db/redis')
 
 const handleUserRouter = (req, res) => {
-    if (req.method == 'GET' && req.path == '/api/user/login') {
-        // const { username, password } = req.body
-        const { username, password } = req.query
+    if (req.method == 'POST' && req.path == '/api/user/login') {
+        const { username, password } = req.body
+        // const { username, password } = req.query
         const result = login(username, password)
         return result.then(data => {
             if (data.username) {
@@ -19,14 +19,14 @@ const handleUserRouter = (req, res) => {
         })
     }
 
-    if (req.method == 'GET' && req.path == '/api/user/login-test') {
-        if (req.session.username) {
-            return Promise.resolve(new SuccessModel({
-                session: req.session
-            }))
-        }
-        return Promise.resolve(new ErrorModel('尚未登录'))
-    }
+    // if (req.method == 'GET' && req.path == '/api/user/login-test') {
+    //     if (req.session.username) {
+    //         return Promise.resolve(new SuccessModel({
+    //             session: req.session
+    //         }))
+    //     }
+    //     return Promise.resolve(new ErrorModel('尚未登录'))
+    // }
 }
 
 module.exports = handleUserRouter

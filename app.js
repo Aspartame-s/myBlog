@@ -3,7 +3,6 @@ const querystring = require('querystring')
 const { get, set } = require('./src/db/redis')
 const handleBlogRouter = require('./src/router/blogRouter')
 const handleUserRouter = require('./src/router/userRouter')
-const {set, get} = require('./src/db/redis')
 
 const SESSION_DATA = {}
 

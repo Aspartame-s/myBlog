@@ -1,5 +1,14 @@
 const { getList, getDetail, newBlog, updateBlog, deleteBlog } = require('../controller/blogController')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
+
+const loginCheck = (req) => {
+    if (!req.session.username) {
+        return Promise.resolve(new ErrorModel('尚未登录'))
+    }
+}
+
+
+
 const handleBlogRouter = (req, res) => {
     const id = req.query.id || ''
 
@@ -27,7 +36,12 @@ const handleBlogRouter = (req, res) => {
     if (req.method == 'POST' && req.path == '/api/blog/new') {
         // const data = newBlog(req.body)
         // return new SuccessModel(data)
-        req.body.author = '张三' //假数据，待开发登陆时替换为真数据
+        const loginCheckResult = loginCheck(req)
+        if(loginCheckResult) {
+            console.log(loginCheckResult)
+            return loginCheckResult
+        }
+        req.body.author = req.session.username
         const result = newBlog(req.body)
         return result.then(data => {
             return new SuccessModel(data)
@@ -35,6 +49,11 @@ const handleBlogRouter = (req, res) => {
     }
     //命中修改路由
     if (req.method == 'POST' && req.path == '/api/blog/update') {
+        const loginCheckResult = loginCheck(req)
+        if(loginCheckResult) {
+            console.log(loginCheckResult)
+            return loginCheckResult
+        }
         const result = updateBlog(id, req.body)
         //这里的id 是通过query传递的，但我觉得应该放在body 随着 blog内容一起传递
         // {
@@ -53,8 +72,13 @@ const handleBlogRouter = (req, res) => {
     }
     //命中删除路由
     if (req.method == 'POST' && req.path == '/api/blog/delete') {
-        const author = '张三'
-        const result = deleteBlog(id,author)
+        const loginCheckResult = loginCheck(req)
+        if(loginCheckResult) {
+            console.log(loginCheckResult)
+            return loginCheckResult
+        }
+        const author = req.session.username
+        const result = deleteBlog(id, author)
         return result.then(data => {
             if (data) {
                 return new SuccessModel()
@@ -62,7 +86,7 @@ const handleBlogRouter = (req, res) => {
                 return new ErrorModel('删除失败')
             }
         })
-        
+
     }
 }
 
