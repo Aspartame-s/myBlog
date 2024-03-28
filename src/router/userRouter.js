@@ -19,8 +19,8 @@ const handleUserRouter = (req, res) => {
         })
     }
 
-    if(req.method == 'GET' && req.path == '/api/user/login-test') {
-        if(req.session.username) {
+    if (req.method == 'GET' && req.path == '/api/user/login-test') {
+        if (req.session.username) {
             return Promise.resolve(new SuccessModel({
                 session: req.session
             }))
