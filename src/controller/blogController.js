@@ -1,15 +1,18 @@
-const {exec} = require('../db/mysql')
+const {exec, escape} = require('../db/mysql')
 //获取博客列表
 const getList = (author, keyword) => {
     console.log(author)
+    author = escape(author)
+    // keyword = escape(keyword)
     let sql = `select * from blogs where 1=1 `
     if(author) {
-        sql += `and author='${author}' `
+        sql += `and author=${author} `
     }
     if(keyword) {
         sql += `and title like '%${keyword}%' `
     }
     sql += `order by createtime desc`
+    console.log(sql)
     return exec(sql)
 }
 //获取博客详情
@@ -24,7 +27,10 @@ const newBlog = (blogData = {}) => {
     //blogData 是post接口的 body参数
     const {title, content, author} = blogData
     const createTime = Date.now()
-    let sql = `insert into blogs (title, content, createtime, author) values ('${title}', '${content}', ${createTime}, '${author}')`
+    title = escape(title)
+    content = escape(content)
+    author = escape(author)
+    let sql = `insert into blogs (title, content, createtime, author) values (${title}, ${content}, ${createTime}, ${author})`
     return exec(sql).then(insertData => {
         return {
             id: insertData.insertId
@@ -35,9 +41,10 @@ const newBlog = (blogData = {}) => {
 const updateBlog = (id, blogData = {}) => {
     // return true
     const {title, content} = blogData
-    let sql = `update blogs set title='${title}', content='${content}' where id='${id}'`
+    title = escape(title)
+    content = escape(content)
+    let sql = `update blogs set title=${title}, content=${content} where id='${id}'`
     return exec(sql).then(updateData => {
-        // console.log(updateData)
         if(updateData.affectedRows > 0) {
             return true
         }

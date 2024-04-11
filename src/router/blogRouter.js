@@ -8,7 +8,6 @@ const loginCheck = (req) => {
 }
 
 
-
 const handleBlogRouter = (req, res) => {
     const id = req.query.id || ''
 
@@ -16,7 +15,6 @@ const handleBlogRouter = (req, res) => {
     if (req.method == 'GET' && req.path == '/api/blog/list') {
         let author = req.query.author || ''
         const keyword = req.query.keyword || ''
-        console.log(req.session)
         if(req.query.isadmin) {
             const loginCheckResult = loginCheck(req)
             if(loginCheckResult) {
@@ -28,7 +26,6 @@ const handleBlogRouter = (req, res) => {
 
         const result = getList(author, keyword)
         return result.then(listData => {
-            console.log(listData)
             return new SuccessModel(listData)
         })
         // const listData = getList(author, keyword)

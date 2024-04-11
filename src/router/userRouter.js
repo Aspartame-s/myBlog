@@ -9,7 +9,7 @@ const handleUserRouter = (req, res) => {
         const result = login(username, password)
         return result.then(data => {
             if (data.username) {
-                console.log('req.session', req.session)
+                // console.log('req.session', req.session)
                 req.session.username = data.username
                 req.session.realname = data.realname
                 set(req.sessionId, req.session)
